@@ -1,12 +1,27 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <sys/types.h>
+
+#define SA struct sockaddr
+
+const int MAXLINE = 1024;
+
+void welcome_msg(int connfd) {
+    std::string msg[3] = {
+        "********************************\n",
+        "** Welcome to the BBS server. **\n",
+        "********************************\n"
+    };
+
+    for (int i = 0; i < 3; ++i) send(connfd, msg[i].c_str(), msg[i].size(), 0);
+}
 
 int main(int argc, char **argv) {
     int                 listenfd, connfd;
@@ -31,7 +46,7 @@ int main(int argc, char **argv) {
             inet_ntop(AF_INET, &clientaddr.sin_addr, buff, sizeof(buff)), 
             ntohs(clientaddr.sin_port));
 
-        Close(connfd);
+        welcome_msg(connfd);
 
         close(connfd);
     }
