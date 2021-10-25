@@ -21,7 +21,15 @@ bool ParseCommand(std::stringstream &ss, int fd, std::vector<std::string> &cmd)
     std::string str;
 
     while (std::getline(ss, str, ' '))
+    {
+        if (str[0] == '"')
+        {
+            std::string temp = str.substr(1);
+            std::getline(ss, str, '"');
+            str = temp + ' ' + str;
+        }
         cmd.push_back(rtrim(str));
+    }
 
     auto func = kCommandFuntions.find(cmd.at(0));
     if (func != kCommandFuntions.end())

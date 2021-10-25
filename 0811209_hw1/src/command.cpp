@@ -12,14 +12,28 @@ namespace User
     {
     public:
         std::string passwd;
-        std::forward_list<std::string> mailbox;
+        std::map<std::string, std::queue<std::string>> mailbox;
 
         UserInfo(std::string);
 
-        std::forward_list<std::string> receiveMail()
+        std::string receiveMail(std::string name)
         {
-            mailbox.sort();
-            return mailbox;
+            auto it = mailbox.find(name);
+            if (it == mailbox.end())
+            {
+                return "";
+            }
+            else
+            {
+                std::string msg = (it->second).front();
+                (it->second).pop();
+
+                if ((it->second).empty())
+                {
+                    mailbox.erase(it);
+                }
+                return msg;
+            }
         }
     };
 
@@ -139,15 +153,86 @@ void Exit(std::vector<std::string> &arg_str, int fd)
 
 void Send(std::vector<std::string> &arg_str, int fd)
 {
-    return;
+    if (arg_str.size() < 3)
+    {
+        write(fd, ErrorMsg::kSendUsageError.c_str(), ErrorMsg::kSendUsageError.size());
+        return;
+    }
+
+    // if not logged in
+    if (!CurrentUser::isLogin)
+    {
+        write(fd, ErrorMsg::kNoLoginError.c_str(), ErrorMsg::kNoLoginError.size());
+        return;
+    }
+
+    auto user = User::users.find(arg_str.at(1));
+
+    // if user doesn't exist
+    if (user == User::users.end())
+        write(fd, ErrorMsg::kNoUserError.c_str(), ErrorMsg::kNoUserError.size());
+    else
+    {
+        if ((user->second).mailbox.find(CurrentUser::name) == (user->second).mailbox.end())
+        {
+            (user->second).mailbox.emplace(CurrentUser::name, std::queue<std::string>());
+        }
+
+        ((user->second).mailbox.find(CurrentUser::name)->second).push(arg_str.at(2));
+    }
 }
 
 void ListMsg(std::vector<std::string> &arg_str, int fd)
 {
-    return;
+    // if not logged in
+    if (!CurrentUser::isLogin)
+    {
+        write(fd, ErrorMsg::kNoLoginError.c_str(), ErrorMsg::kNoLoginError.size());
+        return;
+    }
+
+    auto user = User::users.find(CurrentUser::name);
+
+    // if mailbox is empty, print prompt
+    if ((user->second).mailbox.empty())
+    {
+        write(fd, PromptMsg::kEmptyMailBox.c_str(), PromptMsg::kEmptyMailBox.size());
+        return;
+    }
+
+    for (auto m : (user->second).mailbox)
+    {
+        std::stringstream ss;
+        ss << m.second.size() << " message from " << m.first << ".\n";
+        
+        write(fd, ss.str().c_str(), ss.str().size());
+    }
 }
 
 void Receive(std::vector<std::string> &arg_str, int fd)
 {
-    return;
+    if (arg_str.size() < 2)
+    {
+        write(fd, ErrorMsg::kReceiveUsageError.c_str(), ErrorMsg::kReceiveUsageError.size());
+        return;
+    }
+
+    // if not logged in
+    if (!CurrentUser::isLogin)
+    {
+        write(fd, ErrorMsg::kNoLoginError.c_str(), ErrorMsg::kNoLoginError.size());
+        return;
+    }
+
+    // if user doesn't exist
+    if (!User::users.count(arg_str.at(1)))
+        write(fd, ErrorMsg::kNoUserError.c_str(), ErrorMsg::kNoUserError.size());
+    else
+    {
+        auto user = User::users.find(CurrentUser::name);
+        std::string msg = (user->second).receiveMail(arg_str.at(1));
+        msg += '\n';
+
+        write(fd, msg.c_str(), msg.size());
+    }
 }

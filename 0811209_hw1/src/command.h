@@ -39,6 +39,7 @@ namespace PromptMsg
     const std::string kRegSuccess = "Register successfully.\n";
     const std::string kLoginSuccess = "Welcome, ";
     const std::string kLogoutSuccess = "Bye, ";
+    const std::string kEmptyMailBox = "Your message box is empty.\n";
 };
 
 namespace ErrorMsg
@@ -49,6 +50,9 @@ namespace ErrorMsg
     const std::string kNoLogoutError = "Please logout first.\n";
     const std::string kLoginFailError = "Login failed.\n";
     const std::string kNoLoginError = "Please Login first.\n";
+    const std::string kSendUsageError = "Usage: send <username> <message>\n";
+    const std::string kNoUserError = "User not existed.\n";
+    const std::string kReceiveUsageError = "Usage: receive <username>\n";
 };
 
 void Register(std::vector<std::string> &arg_str, int fd);
