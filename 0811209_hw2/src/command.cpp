@@ -17,7 +17,7 @@ void Register(std::list<std::string> &arg_str, Session *s)
     auto arg = arg_str.begin();
     std::advance(arg, 1);
     if (User::users.count(*arg))
-        write(s->fd, ErrorMsg::kRegDupUserError.c_str(), ErrorMsg::kRegDupUserError.size());
+        sendMsg(s, ErrorMsg::kRegDupUserError);
     else
     {
         const std::string username = *arg;
@@ -198,7 +198,10 @@ CreatePostParseArg:
         goto CreatePostParseArg;
 
     // TODO: add date
-    Post newPost(BBS::SN++, title, s->user->name, "", content);
+    time_t now = std::time(nullptr);
+    std::tm *tm = std::gmtime(&now);
+    std::string date = std::to_string((tm->tm_mon) + 1) + '/' + std::to_string((tm->tm_mday));
+    Post newPost(BBS::SN++, title, s->user->name, date, content);
     BBS::posts.emplace(newPost.getSN(), newPost);
     board->second.addPost(newPost.getSN());
 
