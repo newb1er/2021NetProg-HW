@@ -52,6 +52,7 @@ private:
 namespace BBS
 {
     std::map<std::string, Board> boards;
+    std::list<Board *> board_history;
     std::map<uint64_t, Post> posts;
     uint64_t SN = 1;
 }

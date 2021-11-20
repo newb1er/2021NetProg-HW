@@ -131,6 +131,7 @@ void CreateBoard(std::list<std::string> &arg_str, Session *s)
     }
     else
     {
+        BBS::board_history.push_back(&(board.first->second));
         sendMsg(s, PromptMsg::kBoardCreateSuccess);
     }
 }
@@ -223,11 +224,11 @@ void ListBoard(std::list<std::string> &arg_str, Session *s)
     int idx = 1;
     std::string name, moderator;
 
-    fprintf(s->fp, "Index\tName\tModerator\n");
-    for (auto board : BBS::boards)
+    fprintf(s->fp, "Index Name Moderator\n");
+    for (auto board : BBS::board_history)
     {
-        board.second.getInfo(name, moderator);
-        fprintf(s->fp, "%d\t%s\t%s\n", idx++, name.c_str(), moderator.c_str());
+        board->getInfo(name, moderator);
+        fprintf(s->fp, "%d %s %s\n", idx++, name.c_str(), moderator.c_str());
     }
 }
 
@@ -251,7 +252,7 @@ void ListPost(std::list<std::string> &arg_str, Session *s)
         return;
     }
 
-    fprintf(s->fp, "S/N\t\tTitle\t\tAuthor\t\tDate\n");
+    fprintf(s->fp, "S/N Title Author Date\n");
     for (auto post : board->second.getPosts())
     {
         auto p = BBS::posts.find(post);
@@ -261,7 +262,7 @@ void ListPost(std::list<std::string> &arg_str, Session *s)
             continue;
         }
         fprintf(s->fp,
-                "%ld\t\t%s\t\t%s\t\t%s\n",
+                "%ld %s %s %s\n",
                 p->second.getSN(), p->second.getTitle().c_str(),
                 p->second.getAuthor().c_str(), p->second.getDate().c_str());
     }
