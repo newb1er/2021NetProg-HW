@@ -9,7 +9,7 @@ namespace PromptMsg
     const std::string kLogoutSuccess = "Bye, ";
     const std::string kEmptyMailBox = "Your message box is empty.\n";
     const std::string kBoardCreateSuccess = "Create board successfully.\n";
-    const std::string kCreatePostSuccess = "Create post successfully\n";
+    const std::string kCreatePostSuccess = "Create post successfully.\n";
     const std::string kDelPostSuccess = "Delete successfully.\n";
     const std::string kUpdatePostSuccess = "Update successfully.\n";
     const std::string kCommentSuccess = "Comment successfully.\n";
@@ -23,7 +23,7 @@ namespace ErrorMsg
     const std::string kLoginDupError = "User already login.\n";
     const std::string kNoLogoutError = "Please logout first.\n";
     const std::string kLoginFailError = "Login failed.\n";
-    const std::string kNoLoginError = "Please Login first.\n";
+    const std::string kNoLoginError = "Please login first.\n";
     const std::string kSendUsageError = "Usage: send <username> <message>\n";
     const std::string kNoUserError = "User not existed.\n";
     const std::string kReceiveUsageError = "Usage: receive <username>\n";
@@ -31,13 +31,13 @@ namespace ErrorMsg
     const std::string kBoardDupError = "Board already exists.\n";
     const std::string kBoardNullError = "Board does not exist.\n";
     const std::string kPostNullError = "Post does not exist.\n";
-    const std::string kCreatePostUsageError = "usage: create-post <board-name> --title <title> --content <content>\n";
-    const std::string kListPostUsageError = "usage: list-post <board-name>\n";
-    const std::string kReadUsageError = "usage: read <post-S/N>\n";
-    const std::string kDelPostUsageError = "usage: delete-post <post-S/N>\n";
+    const std::string kCreatePostUsageError = "Usage: create-post <board-name> --title <title> --content <content>\n";
+    const std::string kListPostUsageError = "Usage: list-post <board-name>\n";
+    const std::string kReadUsageError = "Usage: read <post-S/N>\n";
+    const std::string kDelPostUsageError = "Usage: delete-post <post-S/N>\n";
     const std::string kPostAccessError = "Not the post owner.\n";
-    const std::string kUpdatePostUsageError = "usage: update-post <post-S/N> --title/content <new>\n";
-    const std::string kCommentUsageError = "usage: comment <post-S/N> <comment>\n";
+    const std::string kUpdatePostUsageError = "Usage: update-post <post-S/N> --title/content <new>\n";
+    const std::string kCommentUsageError = "Usage: comment <post-S/N> <comment>\n";
 };
 
 inline void sendMsg(Session *s, std::string str);
