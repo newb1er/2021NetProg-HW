@@ -58,10 +58,16 @@ void Login(std::list<std::string> &arg_str, Session *s)
         sendMsg(s, ErrorMsg::kLoginFailError);
         return;
     }
+    else if (user->second.isLogin)
+    {
+        sendMsg(s, ErrorMsg::kLoginDupError);
+        return;
+    }
     else
     {
         s->isLogin = true;
         s->user = &(user->second);
+        s->user->isLogin = true;
 
         sendMsg(s, PromptMsg::kLoginSuccess + name + ".\n");
     }
@@ -79,6 +85,7 @@ void Logout(std::list<std::string> &arg_str, Session *s)
         sendMsg(s, PromptMsg::kLogoutSuccess + s->user->name + ".\n");
 
         s->isLogin = false;
+        s->user->isLogin = false;
         s->user = nullptr;
     }
 }
@@ -88,6 +95,9 @@ void Exit(std::list<std::string> &arg_str, Session *s)
     if (s->isLogin == true)
     {
         sendMsg(s, "Bye, " + s->user->name + ".\n");
+        s->user->isLogin = false;
+        s->isLogin = false;
+        s->user = nullptr;
     }
     return;
 }

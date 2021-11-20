@@ -7,7 +7,7 @@ namespace User
     public:
         std::string name;
         std::string passwd;
-        std::map<std::string, std::queue<std::string>> mailbox;
+        bool isLogin = false;
 
         UserInfo(std::string name, std::string passwd) : name(name), passwd(passwd) {}
     };

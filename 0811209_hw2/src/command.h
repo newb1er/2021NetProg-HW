@@ -20,6 +20,7 @@ namespace ErrorMsg
     const std::string kRegUsageError = "Usage: register <username> <password>\n";
     const std::string kRegDupUserError = "Username is already used.\n";
     const std::string kLoginUsageError = "Usage: login <username> <password>\n";
+    const std::string kLoginDupError = "User already login.\n";
     const std::string kNoLogoutError = "Please logout first.\n";
     const std::string kLoginFailError = "Login failed.\n";
     const std::string kNoLoginError = "Please Login first.\n";
