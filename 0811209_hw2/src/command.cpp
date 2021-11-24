@@ -53,14 +53,14 @@ void Login(std::list<std::string> &arg_str, Session *s)
     auto user = User::users.find(name);
 
     // if user not exist or password incorrect
-    if (user == User::users.end() || user->second.passwd != passwd)
+    if (user->second.isLogin)
     {
-        sendMsg(s, ErrorMsg::kLoginFailError);
+        sendMsg(s, ErrorMsg::kNoLogoutError);
         return;
     }
-    else if (user->second.isLogin)
+    else if (user == User::users.end() || user->second.passwd != passwd)
     {
-        sendMsg(s, ErrorMsg::kLoginDupError);
+        sendMsg(s, ErrorMsg::kLoginFailError);
         return;
     }
     else
